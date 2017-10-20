@@ -5,6 +5,17 @@ from spotipy import oauth2
 
 class SpotifyAdapter:
 
+    def get_all_playlists_from_user(self, token, username):
+        if token:
+            sp = spotipy.Spotify(auth=token)
+            playlists = sp.user_playlists(username)
+            return playlists
+
+    def get_all_tracks_from_playlist(self, token, username, pl):
+        if token:
+            sp = spotipy.Spotify(auth=token)
+            tracks = sp.user_playlist_tracks(username, pl['id'])
+            return tracks
 
     def get_random_tracks_from_user_playlist(self,list, size, token, username):
         if token:
@@ -22,3 +33,4 @@ class SpotifyAdapter:
 
     def get_username(self):
         return 'listpy'
+
