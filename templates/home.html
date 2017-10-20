@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block head %}
+<script src="{{url_for('static', filename='js/test.js')}}"></script>
+{% endblock %}
+{% block title %}Inicio{% endblock %}
+{% block content %}
+    <h1>Buscar siguientes</h1>
+    <input id="search-next-song-input"/>
+{% endblock %}
