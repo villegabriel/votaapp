@@ -12,19 +12,19 @@ window.onload = function(){
                         $.ajax( {
                           method: "post",
                           url: "searchSongService",
+                          timeout: 200000000,
                           data: {
                             operation: "searchSong",
                             term: request.term
                           },
                           success: function( data ) {
-                            console.log(data );
-                            response(data);
+                            response(data.results);
                           }
                         } );
                       },
                       minLength: 2,
                       select: function( event, ui ) {
-                        log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+                        console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );
                       }
             });
 
