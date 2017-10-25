@@ -26,24 +26,25 @@ def create_app():
     Bootstrap(app)
     @app.route("/searchSongService",methods=['POST'])
     def searchSongService():
-        listToReturn = []
-        listToValidate = []
-    #    obj1 = Test()
-    #    obj1.id = 1
-    #    obj1.value = "gato"
-    #    obj2 = Test()
-       # obj2.id = 2
-      #  obj2.value = "tobogan"
-     #   listToValidate.append(obj1)
-    #    listToValidate.append(obj2)
-   #     for candidate in listToValidate:
-   #         if candidate.value.startswith(request.form['term']):
-  #              listToReturn.append(candidate)
         sp = sa.SpotifyAdapter()
-        listToReturn = sp.adapt_to_autocomplete(sp.search(request.form['term']))
-        #prepared = jsonify(listToReturn)
-        prepared = jsonify(results =[result.serialize() for result in listToReturn])
-        return prepared
+        if request.form['operation'] == "searchSong":
+            listToReturn = sp.adapt_to_autocomplete(sp.search(request.form['term']))
+            print listToReturn
+            prepared = jsonify(results =[result.serialize() for result in listToReturn])
+            return prepared
+        elif request.form['operation'] == "getUserTracks":
+            offset = request.form['offset']
+            return jsonify(sp.get_user_saved_tracks(sp.get_token(),offset))
+        elif "addSongToMyMusic" == request.form['operation']:
+            id = request.form['id']
+            sp.current_user_saved_tracks_add(sp.get_token(), [id])
+            return True
+        elif "getAllPlaylists" == request.form['operation']:
+            return jsonify(sp.get_all_playlists_from_user(sp.get_token(), sp.get_username()))
+        elif "createPlaylist" == request.form['operation']:
+            return jsonify(sp.create_playlist(sp.get_username(), request.form['plname'] , sp.get_token()))
+        elif "addTracksToPlaylist" == request.form['operation']:
+            return jsonify(sp.user_playlist_add_tracks(sp.get_token(), sp.get_username(), request.form['plid'], request.form['ids']))
 
     @app.route("/")
     def root():

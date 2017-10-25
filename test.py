@@ -60,3 +60,9 @@ def adapt_to_autocomplete(tracks):
         lista.append(o)
     return lista
 
+def get_user_saved_tracks():
+    token=util.prompt_for_user_token(username='listpy',scope='user-library-read',client_id='26501fd392cc4de19bb49aa6300002ae',client_secret='30a58c910ced414b92aa5dc707f8ccf5',redirect_uri='https://villegabriel.github.io/pruebaSoporte/')
+    sp = spotipy.Spotify(auth=token)
+    result = sp.current_user_saved_tracks()
+    return result['items']
+

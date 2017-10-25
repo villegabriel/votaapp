@@ -17,7 +17,11 @@
 
 {% block title %}Inicio{% endblock %}
 {% block content %}
-    <h1>Buscar siguientes</h1>
-    <input id="search-next-song-input"/>
-    <div id="container-canciones" ></div>
+    <button id="hola">Comenzar</button>
+    <h1>Agregar a mi musica</h1>
+<input id="search-next-song-input"/>
+<input style="display:none" id="current-offset"/>
+<div id="container-canciones" ></div>
+<div id="container-canciones-elegidas" ></div>
+<button id="select-cancion">Elegir</button>
 {% endblock %}
