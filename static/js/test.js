@@ -24,7 +24,6 @@ window.onload = function(){
                       },
                       minLength: 2,
                       select: function( event, ui ) {
-                        console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );
                         var addingSongToMyMusic = addSongToMyMusic(ui.item.id);
                         addingSongToMyMusic.done(function(){
                             alert('Agregada correctamente');
@@ -42,7 +41,6 @@ window.onload = function(){
                 var gettingTracks = getUserTracks(offset);
                     gettingTracks.done(function(data){
                         var tracks = data;
-                        console.log(tracks);
                         var html = '<ul>';
                         tracks.forEach(function(o){
                             html = html + '<li id="'+o.track.id+'"><input name="tracks-elegibles" data-name="'+o.track.name+'" value="'+o.track.id+'" type="radio" >'+o.track.name+'</li>';
@@ -59,7 +57,6 @@ window.onload = function(){
                 var text = $('input[name="tracks-elegibles"]:checked').attr('data-name');
                 $('#container-canciones-elegidas').append('<li data-id="'+selectedId +'">'+text+'</li>');
                 $('#current-offset').val($('#current-offset').val() + 5);
-                console.log($('#current-offset').val());
                 getAndPutSongs($('#current-offset').val());
             })
 
@@ -74,10 +71,8 @@ window.onload = function(){
                             offset: offset
                           },
                           success: function( data ) {
-                            console.log(data);
                           }
                 } );
-                console.log(request);
                 return request;
             }
 
@@ -91,11 +86,40 @@ window.onload = function(){
                             id: id
                           },
                           success: function( data ) {
-                            console.log(data);
                           }
                 } );
-                console.log(request);
+                return request;
+            }
+            function addTracksToPlaylist(ids, plid){
+                var request = $.ajax( {
+                          method: "post",
+                          url: "searchSongService",
+                          timeout: 200000000,
+                          data: {
+                            operation: "addTracksToPlaylist",
+                            ids:  JSON.stringify(ids),
+                            plid: plid
+                          },
+                          success: function( data ) {
+                          }
+                } );
                 return request;
             }
 
+            $('#confirm-list').on('click', function(){
+
+            });
+
+            $('#confirm-playlist').on('click', function(){
+                var arreglo = [];
+                $('#container-canciones-elegidas').find('li').each(function(){
+                    arreglo.push($(this).attr('data-id'));
+                });
+                if($('input[name="playlist-to-add"]:checked').length){
+                    var selectedPlayListId = $('input[name="playlist-to-add"]:checked').val();
+                    addTracksToPlaylist(arreglo, selectedPlayListId);
+                } else if($('#newListName').val() != ''){
+                }
+
+            })
 }

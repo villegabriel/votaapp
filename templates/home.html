@@ -17,11 +17,50 @@
 
 {% block title %}Inicio{% endblock %}
 {% block content %}
-    <button id="hola">Comenzar</button>
+    <button class="btn btn-primary" id="hola">Comenzar</button>
     <h1>Agregar a mi musica</h1>
 <input id="search-next-song-input"/>
 <input style="display:none" id="current-offset"/>
 <div id="container-canciones" ></div>
+<button id="select-cancion" class="btn btn-primary" >Elegir</button>
 <div id="container-canciones-elegidas" ></div>
-<button id="select-cancion">Elegir</button>
+<button id="confirm-list" data-toggle="modal" data-target="#agregarALista" class="btn btn-primary" >Confirmar</button>
+
+<div id="agregarALista" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Añadir a lista</h4>
+      </div>
+      <div class="modal-body">
+          <div class="col-md-6">
+            <span>Playlists</span>
+            <ul>
+                {% for pl in playlists %}
+                  <li><input type="radio" value="{{ pl.id }}" name="playlist-to-add">{{ pl.name }}</li>
+                {% endfor %}
+            </ul>
+          </div>
+          <div class="col-md-6">
+
+          </div>
+          <div class="col-md-12">
+              <div class="form-group">
+                <label for="newListName">Crear nueva</label>
+                <input type="text" class="form-control" id="newListName">
+                  <button id="confirm-playlist" data-toggle="modal" data-target="#agregarALista" class="btn btn-primary" >Confirmar</button>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 {% endblock %}
