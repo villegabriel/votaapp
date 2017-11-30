@@ -30,7 +30,7 @@ class SpotifyAdapter:
 
     def get_token(self):
         username =  self.get_username()
-        return util.prompt_for_user_token(username=username,scope='playlist-modify-public playlist-modify-private user-library-modify user-library-read',client_id='26501fd392cc4de19bb49aa6300002ae',client_secret='30a58c910ced414b92aa5dc707f8ccf5',redirect_uri='https://villegabriel.github.io/pruebaSoporte/')
+        return util.prompt_for_user_token(username=username,scope='user-read-currently-playing playlist-modify-public playlist-modify-private user-library-modify user-library-read',client_id='26501fd392cc4de19bb49aa6300002ae',client_secret='30a58c910ced414b92aa5dc707f8ccf5',redirect_uri='https://villegabriel.github.io/pruebaSoporte/')
 
     def get_username(self):
         return 'listpy'
@@ -75,3 +75,7 @@ class SpotifyAdapter:
         sp = spotipy.Spotify(auth=token)
         result = sp.user_playlist_create(username, plname, public=True, description='Lista creada por Votaapp')
         return result
+
+    def get_current_playing(self):
+        sp = spotipy.Spotify(auth=self.get_token())
+        return sp.current_user_playing_track()
