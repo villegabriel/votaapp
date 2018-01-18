@@ -5,6 +5,9 @@ window.onload = function(){
 //            alert($(this).val());
 //        });
 
+            setInterval(function(){
+
+            }, 3000);
 
             $( "#search-next-song-input" ).autocomplete({
               //source: availableTags
