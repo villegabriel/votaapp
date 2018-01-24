@@ -1,16 +1,13 @@
-import json
-import time
 import spotipy
 import tweepy
-import datetime
-from spotipy import util
+import random
 from spotipy.oauth2 import SpotifyOAuth
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
-from spotipy import oauth2
-import jinja2
 from flask_bootstrap import Bootstrap
 from clases import spotifyAdapter as sa
 from threading import Timer
+from clases.data.Song import Song
+from clases.data.SongData import SongData
 
 sp_oauth = SpotifyOAuth('26501fd392cc4de19bb49aa6300002ae', '30a58c910ced414b92aa5dc707f8ccf5','http://127.0.0.1:5000/authenticateSpotify',scope='user-read-playback-state user-read-currently-playing playlist-modify-public playlist-modify-private user-library-modify user-library-read')
 
@@ -52,11 +49,12 @@ def create_app():
     @app.route("/")
     def root():
         sp = sa.SpotifyAdapter()
-        playlists = sp.get_all_playlists_from_user(sp.get_token(), sp.get_username())
+        playlists = sp.get_all_playlists_from_user(session["access_token_spotify"], sp.get_username())
         update_user_songs()
         #current_song = sp.get_current_playing()
         #t = Timer((current_song['item']['duration_ms'] - current_song['progress_ms'])/1000, test_timer)
         #t.start()
+
         return render_template("home.html", playlists=playlists['items'])
 
     def test_timer():
@@ -121,7 +119,12 @@ def create_app():
 
     def update_user_songs():
         songs = get_all_user_songs()
-        
+
+        sd = SongData()
+        for song in songs:
+            songObject = Song(song['track']['id'],song['track']['name'],song['track']['artists'][0]['name'])
+            if not sd.buscar_por_id(songObject.id_song):
+                sd.add_song(songObject)
 
 
     def get_all_user_songs():
@@ -139,6 +142,7 @@ def create_app():
             offset = offset + 50
             if not items:
                 is_terminated = True
+        return all_songs
 
     return app
 create_app().run(debug=1)

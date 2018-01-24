@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 
 class DataAccess():
     def __init__(self):
-        self.engine = create_engine('mysql+pymysql://root@localhost:3306/votaapp')
+        self.engine = create_engine('mysql+pymysql://root:root@localhost:3306/votaapp?charset=utf8', encoding='utf-8')
         base = declarative_base()
         base.metadata.bind = self.engine
         session = sessionmaker()
